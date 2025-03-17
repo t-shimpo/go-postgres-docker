@@ -20,12 +20,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Database connection successful"))
