@@ -13,17 +13,20 @@ import (
 func handler(w http.ResponseWriter, r *http.Request) {
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		log.Fatal("DATABASE_URL is not set")
+		http.Error(w, "DATABASE_URL not set", http.StatusInternalServerError)
+		return
 	}
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	defer db.Close()
 
